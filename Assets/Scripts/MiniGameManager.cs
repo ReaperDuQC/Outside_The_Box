@@ -14,7 +14,8 @@ namespace Kevin
             if (_controls == null)
             {
                 _controls = new Controls();
-                _controls.TrainController.Move.performed += i =>_movementInput = i.ReadValue<Vector2>();
+                _controls.TrainController.Move.performed += i => _movementInput = i.ReadValue<Vector2>();
+                _controls.TrainController.Move.canceled += i => _movementInput = i.ReadValue<Vector2>();
             }
             _controls.Enable();
         }
@@ -25,10 +26,21 @@ namespace Kevin
         private void Update()
         {
             HandleMovementInput();
+            HandleRotationInput();
         }
         void HandleMovementInput()
         {
-
+            if (Mathf.Abs(_movementInput.y) > 0)
+            {
+                _trainController.Accelerate(_movementInput.y);
+            }
+        }
+        void HandleRotationInput()
+        {
+            if (Mathf.Abs(_movementInput.x) > 0)
+            {
+                _trainController.Turn(_movementInput.x);
+            }
         }
     }
 }

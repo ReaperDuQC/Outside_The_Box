@@ -214,7 +214,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 469224999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -233,9 +233,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea03802fde717834c814147de347eaa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentspeed: 5
-  _maxMoveSpeed: 100
-  _rotationSpeed: 5
+  _currentspeed: 0
+  _accelerationFactor: 0.1
+  _minMoveSpeed: 0
+  _maxMoveSpeed: 10
+  _rotationDirection: {x: 0, y: 0, z: -1}
+  _rotationSpeed: 50
+  _currentRotation: {x: 0, y: 0, z: 0, w: 0}
   _engine: {fileID: 469224999}
   _wagons: []
   _debug: 1
@@ -425,7 +429,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264052317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1625409, y: -1.356219, z: 16.214157}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -443,6 +447,7 @@ GameObject:
   - component: {fileID: 1686312312}
   - component: {fileID: 1686312311}
   - component: {fileID: 1686312310}
+  - component: {fileID: 1686312313}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -509,13 +514,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686312309}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -22.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1686312313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686312309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6326eee3792f86e4daeaf9553275ec99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {fileID: 469225003}
+  _offsetPosition: {x: 0, y: 0, z: -20}
+  _desiredPosition: {x: 0, y: 0, z: 0}
+  _followSpeed: 5
 --- !u!1 &1898496348
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,6 +567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trainController: {fileID: 469225004}
+  _movementInput: {x: 0, y: 0}
 --- !u!4 &1898496350
 Transform:
   m_ObjectHideFlags: 0
@@ -554,7 +576,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898496348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.1404712, y: 6.8897533, z: 16.20704}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
