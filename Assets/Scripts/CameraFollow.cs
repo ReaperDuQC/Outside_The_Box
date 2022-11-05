@@ -16,15 +16,10 @@ namespace Kevin
         {
             _targetPosition = _target.position;
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-            _desiredPosition = Vector3.Lerp(_targetPosition, _target.position, _followSpeed * Time.deltaTime);
-            _targetPosition = _target.position;
-        }
         private void LateUpdate()
         {
+            _desiredPosition = _target.position;// Vector3.Lerp(_targetPosition, _target.position, /*_followSpeed **/ Time.deltaTime);
+            _targetPosition = _target.position;
             transform.position = _desiredPosition + _offsetPosition;
         }
     }
