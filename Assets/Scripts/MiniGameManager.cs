@@ -6,7 +6,8 @@ namespace Kevin
 {
     public class MiniGameManager : MonoBehaviour
     {
-        [SerializeField] TrainController _trainController;
+        [SerializeField] CameraFollow _cameraFollow;
+        [SerializeField] TrainController3 _trainController;
         Controls _controls;
         [SerializeField] Vector2 _movementInput;
         private void OnEnable()

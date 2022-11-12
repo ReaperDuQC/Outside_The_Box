@@ -1,49 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using static UnityEngine.GridBrushBase;
 
 namespace Kevin
 {
     public class TrainController : MonoBehaviour
     {
+        [SerializeField] float _distanceBetween = .2f;
+
         [SerializeField] float _currentSpeed;
         [SerializeField] float _accelerationFactor = 0.5f;
-        [SerializeField] float _minMoveSpeed = -5f;
+        [SerializeField] float _minMoveSpeed = 0f;
         [SerializeField] float _maxMoveSpeed = 100f;
+
         [SerializeField] Vector3 _rotationDirection;
-        [SerializeField] float _rotationSpeed = 5f;
-        [SerializeField] Quaternion _currentRotation;
+        [SerializeField] float _rotationSpeed = 180f;
         [SerializeField] Transform _enginAnchorPoint;
 
         [SerializeField] GameObject _engine;
-        [SerializeField] GameObject _wagonPrefabs;
-        [SerializeField] HingeJoint _engineJoint;
-        [SerializeField] List<GameObject> _wagons;
-        [SerializeField] int _nbWagons;
-        int _currentWagon = -1;
-        int _nextWagon = 0;
+        [SerializeField] List<GameObject> _wagonPrefabs;
+        [SerializeField] List<MarkerManager> _train;
 
-        [SerializeField] bool _debug;
-        [SerializeField] float _debugRayDistance = 5f;
+        float _countUp = 0f;
 
+        [SerializeField] int _initialNbWagons;
         private void Awake()
         {
-            _engineJoint = GetComponent<HingeJoint>();
-        }
-        private void Start()
-        {
-            for (int i = 0; i < _nbWagons; i++)
+            if (!_engine.GetComponent<MarkerManager>())
             {
-                AddWagon();
+                _engine.AddComponent<MarkerManager>();
             }
-        }
-        private void OnDrawGizmos()
-        {
-            if (!_debug) return;
-            if (_engine == null) return;
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawRay(_engine.transform.position, _engine.transform.up * _debugRayDistance);
+            _engine.transform.parent = transform;
+            _train.Add(_engine.GetComponent<MarkerManager>());
         }
         public void Accelerate(float accelerationCoefficient)
         {
@@ -53,39 +43,52 @@ namespace Kevin
         {
             if (_currentSpeed <= 0f) return;
 
-            _currentRotation = _engine.transform.rotation;
-            Quaternion desiredRotation = _currentRotation * Quaternion.Euler(angle * _rotationDirection * _rotationSpeed);
-            _engine.transform.rotation = Quaternion.Slerp(_currentRotation, desiredRotation, Time.deltaTime);
+            Quaternion currentRotation = _engine.transform.rotation;
+            Quaternion desiredRotation = currentRotation * Quaternion.Euler(angle * _rotationDirection * _rotationSpeed);
+            _engine.transform.rotation = Quaternion.Slerp(currentRotation, desiredRotation, Time.deltaTime);
         }
         private void FixedUpdate()
         {
-            _engine.transform.position = Vector3.Lerp(_engine.transform.position, _engine.transform.position + _engine.transform.up * _currentSpeed, Time.deltaTime);
+            if (_train.Count < _initialNbWagons)
+            {
+                AddWagon();
+            }
+            MoveTrain();
+        }
+        void MoveTrain()
+        {
+            _engine.transform.position = _engine.transform.position + _engine.transform.up * _currentSpeed * Time.deltaTime;
+
+            for (int i = 1; i < _train.Count; i++)
+            {
+                MarkerManager marker = _train[i - 1];
+                _train[i].transform.position = marker._markersList[0]._position;
+                _train[i].transform.rotation = marker._markersList[0]._rotation;
+                marker._markersList.RemoveAt(0);
+            }
         }
         public void AddWagon()
         {
-            if (_wagonPrefabs == null) return;
+            if (_wagonPrefabs.Count <= 0) return;
+            MarkerManager markManager = _train[_train.Count - 1].GetComponent<MarkerManager>();
 
-            GameObject wagon = Instantiate(_wagonPrefabs);
-            _wagons.Add(wagon);
-            Transform transformReference = _currentWagon == -1 ? _engine.transform : _wagons[_currentWagon].transform;
-            wagon.transform.position = transformReference.position + -transformReference.up * (Vector3.Magnitude(transformReference.position - transformReference.GetChild(0).position) * 2);
-
-            ConnectWagon(_currentWagon, _nextWagon);
-
-            _currentWagon = _nextWagon;
-            _nextWagon++;
-        }
-        void ConnectWagon(int anchorWagon, int wagonToConnect)
-        {
-            if(anchorWagon == -1)
+            if (_countUp == 0)
             {
-               _engineJoint.connectedBody = _wagons[wagonToConnect].GetComponent<Rigidbody>();
+                markManager.ClearMarkerList();
             }
-            else
+            _countUp += Time.deltaTime;
+
+            if (_countUp >= _distanceBetween)
             {
-                HingeJoint hinge  = _wagons[anchorWagon].AddComponent<HingeJoint>();
-                hinge.anchor = _engineJoint.anchor;
-                hinge.connectedBody = _wagons[wagonToConnect].GetComponent<Rigidbody>();
+                GameObject wagon = Instantiate(_wagonPrefabs[_wagonPrefabs.Count - 1], markManager._markersList[0]._position, markManager._markersList[0]._rotation, transform);
+                if (!wagon.GetComponent<MarkerManager>())
+                {
+                    wagon.AddComponent<MarkerManager>();
+                }
+                MarkerManager mark = wagon.GetComponent<MarkerManager>();
+                mark.ClearMarkerList();
+                _countUp = 0f;
+                _train.Add(mark);
             }
         }
     }

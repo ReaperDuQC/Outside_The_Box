@@ -14,13 +14,21 @@ namespace Kevin
         [SerializeField] float _followSpeed = 5f;
         void Start()
         {
+            if(_target == null) return;
+
             _targetPosition = _target.position;
         }
         private void LateUpdate()
         {
+            if (_target == null) return;
+
             _desiredPosition = _target.position;// Vector3.Lerp(_targetPosition, _target.position, /*_followSpeed **/ Time.deltaTime);
             _targetPosition = _target.position;
             transform.position = _desiredPosition + _offsetPosition;
+        }
+        public void SetTarget(Transform target)
+        {
+            _target = target;
         }
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4607627871052573425}
   - component: {fileID: 4607627871052573426}
   - component: {fileID: 4607627871052573427}
-  - component: {fileID: 4607627871052573431}
+  - component: {fileID: 7048959494903199435}
   m_Layer: 0
   m_Name: Engine
   m_TagString: Untagged
@@ -99,7 +99,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4607627871052573431
+--- !u!114 &7048959494903199435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,24 +108,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4607627871052573436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea03802fde717834c814147de347eaa7, type: 3}
+  m_Script: {fileID: 11500000, guid: 72405513bb795fd4d9950652fe6103b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentSpeed: 0
-  _accelerationFactor: 0.1
-  _minMoveSpeed: 0
-  _maxMoveSpeed: 100
-  _rotationDirection: {x: 0, y: 0, z: -1}
-  _rotationSpeed: 500
-  _currentRotation: {x: 0, y: 0, z: 0, w: 0}
-  _enginAnchorPoint: {fileID: 6745207735106406612}
-  _engine: {fileID: 4607627871052573436}
-  _wagonPrefabs: {fileID: 2767011483834565937, guid: 77552b5f7e643db4787611f773936c4f, type: 3}
-  _engineJoint: {fileID: 0}
-  _wagons: []
-  _nbWagons: 0
-  _debug: 1
-  _debugRayDistance: 2.5
 --- !u!1 &6908203246895386367
 GameObject:
   m_ObjectHideFlags: 0
