@@ -94,6 +94,54 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Mouse"",
+            ""id"": ""ef593b9d-928e-4839-88d0-ee6d144b2b0d"",
+            ""actions"": [
+                {
+                    ""name"": ""StartDrag"",
+                    ""type"": ""Button"",
+                    ""id"": ""d99c95a9-dcff-44ca-90c5-19c9768ca4ec"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EndDrag"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d6bdc1a-dba0-4907-975b-f922476d3062"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""cf047937-0748-4191-bd80-38c8c10d6089"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3dfc45d-0c3f-482c-98b1-de9b6368b22b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EndDrag"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -118,6 +166,10 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         // TrainController
         m_TrainController = asset.FindActionMap("TrainController", throwIfNotFound: true);
         m_TrainController_Move = m_TrainController.FindAction("Move", throwIfNotFound: true);
+        // Mouse
+        m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
+        m_Mouse_StartDrag = m_Mouse.FindAction("StartDrag", throwIfNotFound: true);
+        m_Mouse_EndDrag = m_Mouse.FindAction("EndDrag", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -206,6 +258,47 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         }
     }
     public TrainControllerActions @TrainController => new TrainControllerActions(this);
+
+    // Mouse
+    private readonly InputActionMap m_Mouse;
+    private IMouseActions m_MouseActionsCallbackInterface;
+    private readonly InputAction m_Mouse_StartDrag;
+    private readonly InputAction m_Mouse_EndDrag;
+    public struct MouseActions
+    {
+        private @Controls m_Wrapper;
+        public MouseActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @StartDrag => m_Wrapper.m_Mouse_StartDrag;
+        public InputAction @EndDrag => m_Wrapper.m_Mouse_EndDrag;
+        public InputActionMap Get() { return m_Wrapper.m_Mouse; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MouseActions set) { return set.Get(); }
+        public void SetCallbacks(IMouseActions instance)
+        {
+            if (m_Wrapper.m_MouseActionsCallbackInterface != null)
+            {
+                @StartDrag.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnStartDrag;
+                @StartDrag.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnStartDrag;
+                @StartDrag.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnStartDrag;
+                @EndDrag.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnEndDrag;
+                @EndDrag.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnEndDrag;
+                @EndDrag.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnEndDrag;
+            }
+            m_Wrapper.m_MouseActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @StartDrag.started += instance.OnStartDrag;
+                @StartDrag.performed += instance.OnStartDrag;
+                @StartDrag.canceled += instance.OnStartDrag;
+                @EndDrag.started += instance.OnEndDrag;
+                @EndDrag.performed += instance.OnEndDrag;
+                @EndDrag.canceled += instance.OnEndDrag;
+            }
+        }
+    }
+    public MouseActions @Mouse => new MouseActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -218,5 +311,10 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     public interface ITrainControllerActions
     {
         void OnMove(InputAction.CallbackContext context);
+    }
+    public interface IMouseActions
+    {
+        void OnStartDrag(InputAction.CallbackContext context);
+        void OnEndDrag(InputAction.CallbackContext context);
     }
 }
