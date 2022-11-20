@@ -12,7 +12,7 @@ public class BookScoreManager : MonoBehaviour
 {
 	[SerializeField] BooksLibrary library;
 
-	List<Score> chapterScores = new List<Score>();
+	public List<Score> chapterScores = new List<Score>();
 	Book book;
 
 	bool published = false;
