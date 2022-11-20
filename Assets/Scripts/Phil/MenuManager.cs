@@ -117,7 +117,7 @@ public class MenuManager : MonoBehaviour
 	}
 	private void Awake()
 	{
-		ComputeNbWordPerChap();
+		//ComputeNbWordPerChap();
 	}
 	void ComputeNbWordPerChap()
 	{
@@ -528,10 +528,13 @@ public class MenuManager : MonoBehaviour
 		yield return ErasePage(pageR);
 		yield return ErasePage(pageL);
 	}
-
-	IEnumerator PlaceArm()
+	public void PlaceArm()
 	{
-		Vector3 start = armHiding.position;
+		StartCoroutine(PlaceArmRoutine());
+	}
+	IEnumerator PlaceArmRoutine()
+	{
+		Vector3 start = arm.transform.position;
 		Vector3 end = armStart.position;
 		float timer = 0f;
 		float duration = 1f;
@@ -542,7 +545,11 @@ public class MenuManager : MonoBehaviour
 			yield return null;
 		}
 	}
-	IEnumerator HideArm()
+	public void HideArm()
+	{
+		StartCoroutine(HideArmRoutine());
+	}
+	IEnumerator HideArmRoutine()
 	{
 		Vector3 end = armHiding.position;
 		Vector3 start = arm.transform.position;
@@ -557,7 +564,7 @@ public class MenuManager : MonoBehaviour
 	}
 	IEnumerator MoveArm()
 	{
-		yield return PlaceArm();
+		yield return PlaceArmRoutine();
 
 		for (int j =0; j < 3; j++)
 		{
@@ -615,61 +622,7 @@ public class MenuManager : MonoBehaviour
 			yield return null;
 		}
 
-		StartCoroutine(HideArm());
+		StartCoroutine(HideArmRoutine());
 	}
-
-	//IEnumerator RotateBook(GameObject book,int numberOfTurn, float angle, float speed)
-	//{
-	//    for (int i =0; i < numberOfTurn; i++)
-	//    {
-	//        while (bo)
-	//        {
-
-	//            yield return null;
-	//        }
-	//    }
-	//}
-
-	//private IEnumerator Fade(GameObject book, float fadeDuration, bool fadeIn)
-	//{
-	//    MeshRenderer rend = book.GetComponent<MeshRenderer>();
-	//    Color initialColor = rend.material.color;
-	//    Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
-
-	//    if (fadeIn)
-	//    {
-	//        rend.material.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
-	//        initialColor = rend.material.color;
-	//        book.SetActive(true);
-	//        targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 255f);
-	//    }
-	//    else
-	//    {
-	//        rend.material.color = new Color(rend.material.color.r, rend.material.color.g, rend.material.color.b, 255f);
-	//        initialColor = rend.material.color;
-	//        targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
-	//    }
-
-	//    float elapsedTime = 0f;
-
-	//    if (!fadeIn)
-	//    {
-	//        while (elapsedTime < fadeDuration)
-	//        {
-	//            elapsedTime += Time.deltaTime;
-	//            rend.material.color = Color.Lerp(initialColor, targetColor, elapsedTime / fadeDuration);
-	//            yield return null;
-	//        }
-	//    }
-
-	//    if (!fadeIn)
-	//    {
-	//        book.SetActive(false);
-	//    }
-	//    else
-	//    {
-	//        menuToOpen.SetActive(true);
-	//    }
-	//}
 
 }
