@@ -36,6 +36,8 @@ public class MenuManager : MonoBehaviour
 	[SerializeField] Transform armLimitR;
 	[SerializeField] Transform armLimitL2;
 	[SerializeField] Transform armLimitR2;
+
+	[SerializeField] AudioPlayer musicPlayer;
 	int nbWordChap;
 
 	int camToClose;
@@ -117,6 +119,7 @@ public class MenuManager : MonoBehaviour
 	}
 	private void Awake()
 	{
+		StartMusicMenu();
 		//ComputeNbWordPerChap();
 	}
 	void ComputeNbWordPerChap()
@@ -625,4 +628,23 @@ public class MenuManager : MonoBehaviour
 		StartCoroutine(HideArmRoutine());
 	}
 
+	public void StartMusicMenu()
+	{
+		musicPlayer.PlayMusic();
+	}
+	public void StopMusicMenu()
+	{
+		musicPlayer.StopMusic();
+	}
+
+	public void SFXTurnPage()
+	{
+		StartCoroutine(SFXTurnPageRoutine());
+	}
+
+	IEnumerator SFXTurnPageRoutine()
+	{
+		yield return new WaitForSeconds(1f);
+		musicPlayer.PlaySFX(musicPlayer.clips[0]);
+	}
 }
