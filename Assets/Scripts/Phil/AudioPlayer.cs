@@ -15,7 +15,7 @@ public class AudioPlayer : MonoBehaviour
     public void PlayMusic()
 	{
         musicSource.volume = 0;
-        musicSource.Play();
+        musicSource.UnPause();
         StartCoroutine(Fade(0f, 1f, 2f, false));
 	}
     IEnumerator Fade(float start, float end, float duration, bool stop)
@@ -33,7 +33,7 @@ public class AudioPlayer : MonoBehaviour
 
         if (stop)
         {
-            musicSource.Stop();
+            musicSource.Pause();
         }
     }
 
