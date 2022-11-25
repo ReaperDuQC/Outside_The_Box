@@ -119,7 +119,7 @@ public class MenuManager : MonoBehaviour
 	}
 	private void Awake()
 	{
-		StartMusicMenu();
+		//StartMusicMenu();
 		//ComputeNbWordPerChap();
 	}
 	void ComputeNbWordPerChap()
@@ -161,6 +161,7 @@ public class MenuManager : MonoBehaviour
 			timer += Time.deltaTime;
 			yield return null;
 		}
+		
 		menuToOpen.SetActive(true);
 	}
 	public void CloseMenuDelais()
@@ -180,7 +181,7 @@ public class MenuManager : MonoBehaviour
 	public void FadeBook()
 	{
 		StartCoroutine(FadeInOut(bookFadeIn, bookFadeOut, 1f));
-
+		
 		//StartCoroutine(Fade(bookFadeOut, bookFadeOutTime, false));
 		//StartCoroutine(Fade(bookFadeIn, bookFadeInTime, true));
 	}
@@ -195,6 +196,7 @@ public class MenuManager : MonoBehaviour
 
 		yield return new WaitForSeconds(delais);
 
+		musicPlayer.PlaySFX(musicPlayer.clips[0]);
 		StartCoroutine(Fade(material, 1f, bookFadeInSpeed, true, bookIn));
 		StartCoroutine(Fade(material2, 0f, bookFadeOutSpeed, false, bookOut));
 	}
@@ -412,7 +414,10 @@ public class MenuManager : MonoBehaviour
 		bool rIsRed = false;
 		yield return new WaitForSeconds(1f);
 		StartCoroutine(MoveArm());
-		yield return new WaitForSeconds(1f);
+		
+		yield return new WaitForSeconds(0.5f);
+		musicPlayer.PlaySFX(musicPlayer.clips[1]);
+		yield return new WaitForSeconds(0.5f);
 
 		for (int i = 0; i < 2; i++)
 		{
@@ -433,9 +438,11 @@ public class MenuManager : MonoBehaviour
 				rIsRed = true;
 			}
 			yield return WritePage(pageContent, delaisLetter, pageR);
-
+			musicPlayer.sfxSource.Stop();
+			musicPlayer.PlaySFX(musicPlayer.clips[2]);
 			yield return ErasePage(pageR);
 			yield return ErasePage(pageL);
+			musicPlayer.PlaySFX(musicPlayer.clips[1]);
 		}
 
 		pageCount++;
@@ -458,7 +465,7 @@ public class MenuManager : MonoBehaviour
 			}
 		}
 		yield return WritePage(pageContent, delaisLetter, pageR);
-		
+		musicPlayer.sfxSource.Stop();
 		DisplayChapterBook();
 		int ch = scoreManager.chapterScores.Count;
 		if (ch >= minChapter)
@@ -512,6 +519,7 @@ public class MenuManager : MonoBehaviour
 
 	public IEnumerator ErasePage(TextMeshProUGUI page)
 	{
+		
 		float alpha = 1f;
 		while (alpha >= 0)
 		{
@@ -528,8 +536,10 @@ public class MenuManager : MonoBehaviour
 	}
 	IEnumerator ErasePagesRoutine()
 	{
+		musicPlayer.PlaySFX(musicPlayer.clips[0]);
 		yield return ErasePage(pageR);
 		yield return ErasePage(pageL);
+
 	}
 	public void PlaceArm()
 	{
