@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Onnig
 {
-    public class BoxArea : MonoBehaviour
+    public class BoxZone : MonoBehaviour
     {
         [SerializeField] private float _contractionSpeed = 1.0f;
 
@@ -13,12 +13,18 @@ namespace Onnig
 
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (transform.localScale.x > 0f)
             {
                 float scaleAmount = _contractionSpeed * Time.deltaTime;
                 transform.localScale -= new Vector3(scaleAmount, 0f, scaleAmount);
+
+                // prevent negative size collision bugs
+                if (transform.localScale.x < 0f)
+                {
+                    transform.localScale = Vector3.zero;
+                }
             }
             else
             {

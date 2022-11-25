@@ -8,8 +8,8 @@ namespace Onnig
     {
         public static GameManager Instance;
 
-        [SerializeField] private BoxArea _boxPrefab;
-        [SerializeField] private CloudArea _cloudPrefab;
+        [SerializeField] private BoxZone _boxPrefab;
+        [SerializeField] private CloudZone _cloudPrefab;
         [SerializeField] private Collider _spawnableArea;
         [SerializeField] private float _boxSpawnInterval = 1.0f;
         [SerializeField] private float _cloudSpawnInterval = 2.0f;
@@ -43,9 +43,8 @@ namespace Onnig
             if (_boxSpawnTimer > _boxSpawnInterval)
             {
                 _boxSpawnTimer -= _boxSpawnInterval;
-                BoxArea newBox = Instantiate(_boxPrefab);
+                BoxZone newBox = Instantiate(_boxPrefab);
                 newBox.transform.position = GetRandomSpawnPosition();
-                //newBox.transform.rotation = GetRandomRotation();
             }
             _boxSpawnTimer += deltaTime;
 
@@ -53,7 +52,7 @@ namespace Onnig
             if (_cloudSpawnTimer > _cloudSpawnInterval)
             {
                 _cloudSpawnTimer -= _cloudSpawnInterval;
-                CloudArea newCloud = Instantiate(_cloudPrefab);
+                CloudZone newCloud = Instantiate(_cloudPrefab);
                 newCloud.transform.position = GetRandomSpawnPosition();
                 newCloud.transform.rotation = GetRandomRotation();
             }
