@@ -110,4 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d58bf27a3bf155a4da0ddd759bc0dcb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 8095314578818815182}
+  _collider: {fileID: -4067525791722119586}
   _contractionSpeed: 1.5
+  _spawnDelay: 1.5

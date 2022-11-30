@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Onnig
 {
-    public class GameManager : MonoBehaviour
+    public class ZoneSpawner : MonoBehaviour
     {
-        public static GameManager Instance;
+        public static ZoneSpawner Instance;
 
-        [SerializeField] private BoxZone _boxPrefab;
-        [SerializeField] private CloudZone _cloudPrefab;
+        [SerializeField] private ClicheZone _boxPrefab;
+        [SerializeField] private OriginalityZone _cloudPrefab;
         [SerializeField] private Collider _spawnableArea;
         [SerializeField] private float _boxSpawnInterval = 1.0f;
         [SerializeField] private float _cloudSpawnInterval = 2.0f;
@@ -22,7 +22,7 @@ namespace Onnig
         private void Awake()
         {
             // init singleton
-            Debug.Assert(Instance == null, "Only one instance of GameManager should ever be present!");
+            Debug.Assert(Instance == null, "Only one instance of ZoneSpawner should ever be present!");
             if (Instance == null)
             {
                 Instance = this;
@@ -43,8 +43,8 @@ namespace Onnig
             if (_boxSpawnTimer > _boxSpawnInterval)
             {
                 _boxSpawnTimer -= _boxSpawnInterval;
-                BoxZone newBox = Instantiate(_boxPrefab);
-                newBox.transform.position = GetRandomSpawnPosition();
+                ClicheZone newBox = Instantiate(_boxPrefab);
+                newBox.transform.position = GetRandomSpawnPosition(0.01f);
             }
             _boxSpawnTimer += deltaTime;
 
@@ -52,16 +52,17 @@ namespace Onnig
             if (_cloudSpawnTimer > _cloudSpawnInterval)
             {
                 _cloudSpawnTimer -= _cloudSpawnInterval;
-                CloudZone newCloud = Instantiate(_cloudPrefab);
+                OriginalityZone newCloud = Instantiate(_cloudPrefab);
                 newCloud.transform.position = GetRandomSpawnPosition();
                 newCloud.transform.rotation = GetRandomRotation();
             }
             _cloudSpawnTimer += deltaTime;
         }
 
-        private Vector3 GetRandomSpawnPosition()
+        private Vector3 GetRandomSpawnPosition(float offsetY = 0)
         {
-            return _spawnMinBounds + Vector3.Scale(_spawnSizeBounds, new Vector3(Random.value, 0f, Random.value));
+            Vector3 randomOffsetXZ = Vector3.Scale(_spawnSizeBounds, new Vector3(Random.value, 0f, Random.value));
+            return _spawnMinBounds + (Vector3.up * offsetY) + randomOffsetXZ;
         }
 
         private Quaternion GetRandomRotation()
